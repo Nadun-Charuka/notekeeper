@@ -24,8 +24,7 @@ class _NoteListState extends State<NoteList> {
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           debugPrint("FAB clicked");
-          Navigator.push(
-              context, MaterialPageRoute(builder: (context) => NoteDetails()));
+          navigationToDetailPage();
         },
         tooltip: "Add note",
         child: Icon(Icons.add),
@@ -50,16 +49,27 @@ class _NoteListState extends State<NoteList> {
               "Dummy Title",
               style: titleStyle,
             ),
+            subtitle: Text("Dummy Date"),
             trailing: Icon(
               Icons.delete,
               color: Colors.grey,
             ),
             onTap: () {
               debugPrint("ListTile Tapped");
+              navigationToDetailPage();
             },
           ),
         );
       },
+    );
+  }
+
+  void navigationToDetailPage() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => NoteDetails(),
+      ),
     );
   }
 }
