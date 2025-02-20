@@ -24,7 +24,7 @@ class _NoteListState extends State<NoteList> {
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           debugPrint("FAB clicked");
-          navigationToDetailPage();
+          navigationToDetailPage("Add Note");
         },
         tooltip: "Add note",
         child: Icon(Icons.add),
@@ -35,7 +35,7 @@ class _NoteListState extends State<NoteList> {
   ListView getNoteListView() {
     TextStyle? titleStyle = Theme.of(context).textTheme.headlineMedium;
     return ListView.builder(
-      itemCount: count,
+      itemCount: 5,
       itemBuilder: (context, index) {
         return Card(
           color: Colors.white,
@@ -56,7 +56,7 @@ class _NoteListState extends State<NoteList> {
             ),
             onTap: () {
               debugPrint("ListTile Tapped");
-              navigationToDetailPage();
+              navigationToDetailPage("Edit Note");
             },
           ),
         );
@@ -64,11 +64,13 @@ class _NoteListState extends State<NoteList> {
     );
   }
 
-  void navigationToDetailPage() {
+  void navigationToDetailPage(String title) {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => NoteDetails(),
+        builder: (context) => NoteDetails(
+          appBarTitle: title,
+        ),
       ),
     );
   }

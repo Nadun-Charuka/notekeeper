@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
 
 class NoteDetails extends StatefulWidget {
-  const NoteDetails({super.key});
+  final String appBarTitle;
+  const NoteDetails({super.key, required this.appBarTitle});
 
   @override
   State<NoteDetails> createState() => _NoteDetailsState();
 }
 
 class _NoteDetailsState extends State<NoteDetails> {
-  static var _priorities = ['High', 'Low'];
+  static final _priorities = ['High', 'Low'];
   TextEditingController titleController = TextEditingController();
   TextEditingController descriptionController = TextEditingController();
 
@@ -19,7 +20,7 @@ class _NoteDetailsState extends State<NoteDetails> {
       appBar: AppBar(
         backgroundColor: Theme.of(context).primaryColor,
         title: Text(
-          "Edit Notes",
+          widget.appBarTitle,
           style: TextStyle(color: Colors.white),
         ),
       ),
@@ -84,7 +85,6 @@ class _NoteDetailsState extends State<NoteDetails> {
                     ),
                     child: Text(
                       "Save",
-                      textScaleFactor: 1.5,
                     ),
                     onPressed: () {
                       setState(() {
@@ -104,7 +104,6 @@ class _NoteDetailsState extends State<NoteDetails> {
                     ),
                     child: Text(
                       "Delete",
-                      textScaleFactor: 1.5,
                     ),
                     onPressed: () {
                       setState(() {
