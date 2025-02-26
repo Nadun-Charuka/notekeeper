@@ -16,7 +16,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.deepPurple,
       ),
       title: 'Flutter Demo',
-      home: const NoteList(),
+      home: NoteList(),
     );
   }
 }
