@@ -21,6 +21,7 @@ class Note {
   int get id => _id;
   String get title => _title;
   String? get description => _description;
+  // ignore: unnecessary_getters_setters
   String get date => _date;
   String get priority => _priority;
 
@@ -34,8 +35,9 @@ class Note {
   }
 
   set date(String date) => _date = date;
+
   set priority(String priority) {
-    if (priority == 1 || priority == 2) _priority = priority;
+    if (priority == 'high' || priority == 'low') _priority = priority;
   }
 
   //note obj to map obj

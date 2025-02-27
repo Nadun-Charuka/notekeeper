@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'package:notekeeperapp/models/note.dart';
+import 'package:notekeeperapp/utils/database_helper.dart';
 
 class NoteDetails extends StatefulWidget {
   final String appBarTitle;
-  const NoteDetails({super.key, required this.appBarTitle});
+  final Note note;
+  const NoteDetails({super.key, required this.appBarTitle, required this.note});
 
   @override
   State<NoteDetails> createState() => _NoteDetailsState();
@@ -10,6 +14,8 @@ class NoteDetails extends StatefulWidget {
 
 class _NoteDetailsState extends State<NoteDetails> {
   static final _priorities = ['High', 'Low'];
+
+  DatabaseHelper helper = DatabaseHelper();
   TextEditingController titleController = TextEditingController();
   TextEditingController descriptionController = TextEditingController();
 
@@ -52,6 +58,7 @@ class _NoteDetailsState extends State<NoteDetails> {
                 style: textStyle,
                 onChanged: (value) {
                   debugPrint("Something change on Title Text Feild");
+                  updateTitle();
                 },
                 decoration: InputDecoration(
                     labelText: "Title",
@@ -67,6 +74,7 @@ class _NoteDetailsState extends State<NoteDetails> {
                 style: textStyle,
                 onChanged: (value) {
                   debugPrint("Something change on Description Feild");
+                  updateDescription();
                 },
                 decoration: InputDecoration(
                     labelText: "Description",
@@ -89,6 +97,7 @@ class _NoteDetailsState extends State<NoteDetails> {
                     onPressed: () {
                       setState(() {
                         debugPrint("save");
+                        _save();
                       });
                     },
                   ),
@@ -108,6 +117,7 @@ class _NoteDetailsState extends State<NoteDetails> {
                     onPressed: () {
                       setState(() {
                         debugPrint("Delete");
+                        _delete();
                       });
                     },
                   ),
@@ -118,5 +128,55 @@ class _NoteDetailsState extends State<NoteDetails> {
         ),
       ),
     );
+  }
+
+  void updateTitle() {
+    widget.note.title = titleController.text;
+  }
+
+  void updateDescription() {
+    widget.note.description = descriptionController.text;
+  }
+
+  void _save() async {
+    widget.note.date = DateFormat.yMMMd().format(DateTime.now());
+    int result;
+    if (widget.note.id != null) {
+      result = await helper.updateNote(widget.note);
+    } else {
+      result = await helper.insertNote(widget.note);
+    }
+
+    if (result != 0) {
+      _showAlertDialog('Status', 'Note saved sucessfully');
+    } else {
+      _showAlertDialog('Status', 'Problem in saving note');
+    }
+    moveToLastScreen();
+  }
+
+  void _delete() async {
+    if (widget.note.id == null) {
+      _showAlertDialog('Status', "Note cant delete");
+    }
+    int result = await helper.deleteNote(widget.note.id);
+    if (result != 0) {
+      _showAlertDialog('Status', 'Note deleted sucessfully');
+    } else {
+      _showAlertDialog('Status', 'Problem occure while deleting note');
+    }
+    moveToLastScreen();
+  }
+
+  void _showAlertDialog(String title, String message) {
+    AlertDialog alertDialog = AlertDialog(
+      title: Text(title),
+      content: Text(message),
+    );
+    showDialog(context: context, builder: (context) => alertDialog);
+  }
+
+  void moveToLastScreen() {
+    Navigator.pop(context, true);
   }
 }

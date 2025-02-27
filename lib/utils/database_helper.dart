@@ -29,7 +29,7 @@ class DatabaseHelper {
 
   Future<Database> initializeDatabase() async {
     Directory directory = await getApplicationDocumentsDirectory();
-    String path = directory.path + 'notes.db';
+    String path = '${directory.path}notes.db';
 
     var noteDatabase =
         await openDatabase(path, version: 1, onCreate: _createDb);
@@ -49,7 +49,7 @@ class DatabaseHelper {
 
   //fetch data
   Future<List<Map<String, dynamic>>?> getNoteMapList() async {
-    Database? db = await this.database;
+    Database? db = await database;
     //var result = await db?.rawQuery('select * from $noteTable');
     var result = await db?.query(noteTable); //helper funciton query
     return result;
@@ -87,5 +87,15 @@ class DatabaseHelper {
 
     int? result = Sqflite.firstIntValue(x);
     return result;
+  }
+
+  Future<List<Note>> getNoteList() async {
+    var noteMapList = await getNoteMapList();
+    int count = noteMapList!.length;
+    List<Note> noteList = <Note>[];
+    for (var i = 0; i < count; i++) {
+      noteList.add(Note.fromMap(noteMapList[i]));
+    }
+    return noteList;
   }
 }
